@@ -65,7 +65,6 @@ public class StringSplitter {
                 String wordOrToken = st.nextToken();
                 boolean isTranslatable = !delims.contains(wordOrToken);
                 currentPage.add(new Word(wordOrToken, isTranslatable));
-                System.out.println("FOO: " + wordOrToken);
             }
         }
         parsedDocument.add(currentPage);
