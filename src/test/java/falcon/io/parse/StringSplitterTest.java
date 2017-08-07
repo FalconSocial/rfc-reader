@@ -1,22 +1,25 @@
 package falcon.io.parse;
 
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-class StringSplitterTest {
-    @org.junit.jupiter.api.Test
-    void splitEmpty() {
+public class StringSplitterTest {
+
+    @Test
+    public void splitEmpty() {
         ArrayList<ArrayList<Word>> expected = new ArrayList<>();
         expected.add(new ArrayList<>());
         ArrayList<ArrayList<Word>> actual = StringSplitter.split("");
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
-    void splitLines() {
+    @Test
+    public void splitLines() {
         String document = "this is a line\rthis is another line\n";
         ArrayList<Word> firstLine = new ArrayList<>(
                 Arrays.asList(new Word("this", true),
@@ -37,8 +40,8 @@ class StringSplitterTest {
         assertEquals(expected, actual);
     }
 
-    @org.junit.jupiter.api.Test
-    void splitPages() {
+    @Test
+    public void splitPages() {
         String document = "this, is. a; line\r";
         document += "Rekhter, et al           Best Current Practice                  [Page 1]";
         ArrayList<Word> firstPage = new ArrayList<>(
