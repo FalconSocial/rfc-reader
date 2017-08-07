@@ -5,19 +5,22 @@ import falcon.io.repository.TranslatedRFC;
 import falcon.io.resource.TranslatedRfcDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Created by tibor on 2017-08-07.
  */
-@Component
+@Service
 public class TranslationService {
 
     @Autowired
     private RfcRepository rfcRepository;
 
+    @Transactional
     public String translate(String url, String lang){
         return rfcRepository.save(new TranslatedRFC(UUID.randomUUID().toString())).getId();
     }
