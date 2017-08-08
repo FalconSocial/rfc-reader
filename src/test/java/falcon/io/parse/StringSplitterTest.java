@@ -1,6 +1,7 @@
 package falcon.io.parse;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -92,7 +93,7 @@ public class StringSplitterTest {
     }
 
     @Test
-    public void instantiateWordSplit() throws JsonProcessingException {
+    public void instantiateWordSplit() throws IOException {
         WordSplit w = WordSplit.builder().created("now").payload(
                 new Payload(UUID.randomUUID(), "blah",
                         new Language("en_US", "dk_DK"),
@@ -104,6 +105,13 @@ public class StringSplitterTest {
         ObjectMapper m = new ObjectMapper();
         String wordJSON = m.writeValueAsString(w);
         String literalJSON = m.writeValueAsString(l);
+        WordSplit w2 = m.readValue(wordJSON, WordSplit.class);
+        LiteralSplit s2 = m.readValue(literalJSON, LiteralSplit.class);
     }
 
+    @Test
+    public void testMultipleRFCs() {
+        System.out.println("Working Directory = " +
+                System.getProperty("user.dir"));
+    }
 }

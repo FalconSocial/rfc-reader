@@ -1,9 +1,10 @@
 package falcon.io.service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
+@AllArgsConstructor
 public class LiteralSplit extends WordSplit {
-    private String type = "LiteralSplit";
 
     @Builder
     private LiteralSplit(String created, Payload payload) {
