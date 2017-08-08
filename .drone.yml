@@ -3,7 +3,7 @@ pipeline:
     image: frolvlad/alpine-oraclejdk8
     commands:
       - chmod +x ./mvnw
-      - ./mvnw --settings=settings.xml clean install
+      - ./mvnw clean install
     when:
       event: pull_request
       branch:
@@ -12,7 +12,7 @@ pipeline:
     image: frolvlad/alpine-oraclejdk8
     commands:
       - chmod +x ./mvnw
-      - ./mvnw -Pdist clean install
+      - ./mvnw install
     when:
       event: push
       branch: master
