@@ -29,4 +29,9 @@ public class RFCReaderResource {
     public ResponseEntity<TranslatedRfcDTO> getTranslatedRfc(@PathVariable("id") String id){
         return ResponseEntity.ok(translationService.getTranslation(id));
     }
+
+    @RequestMapping(value = "translated", method = RequestMethod.POST)
+    public ResponseEntity<TranslatedRfcDTO> documentTopicHook(@PathVariable("id") String id){
+        return ResponseEntity.ok(translationService.getTranslation(id));
+    }
 }
