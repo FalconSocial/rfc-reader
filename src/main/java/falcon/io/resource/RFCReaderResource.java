@@ -1,6 +1,7 @@
 package falcon.io.resource;
 
 import falcon.io.service.TranslationService;
+import falcon.io.service.dto.DocumentAssembled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,20 +19,28 @@ public class RFCReaderResource {
     private TranslationService translationService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> postRfcUrl(@RequestBody RFCTranslateRequest request, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<Void> postRfcUrl(@RequestBody RFCTranslateRequest request, UriComponentsBuilder uriBuilder) {
 
-        UriComponents uriComponents = uriBuilder.path("/{id}").buildAndExpand(translationService.translate(request.getUrl(), request.getLang()));
+        UriComponents uriComponents = uriBuilder.path("/{id}")
+                .buildAndExpand(translationService.translate(request.getUrl(),request.getSrcLang(), request.getTgtLang()));
 
-        return ResponseEntity.created(uriComponents.toUri()).build();
+        return ResponseEntity.created(uriComponents.toUri())
+                .build();
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ResponseEntity<TranslatedRfcDTO> getTranslatedRfc(@PathVariable("id") String id){
+    public ResponseEntity<TranslatedRfcDTO> getTranslatedRfc(@PathVariable("id") String id) {
         return ResponseEntity.ok(translationService.getTranslation(id));
     }
 
-    @RequestMapping(value = "translated", method = RequestMethod.POST)
-    public ResponseEntity<TranslatedRfcDTO> documentTopicHook(@PathVariable("id") String id){
-        return ResponseEntity.ok(translationService.getTranslation(id));
+    @RequestMapping(value = "/translated", method = RequestMethod.POST)
+    public ResponseEntity<Void> documentTopicHook(@RequestBody DocumentAssembled document, UriComponentsBuilder uriBuilder) {
+        translationService.saveTranslation(document);
+        UriComponents uriComponents = uriBuilder.path("/{id}")
+                .buildAndExpand(document.getAggreateId());
+
+        return ResponseEntity.created(uriComponents.toUri())
+                .build();
+
     }
 }

@@ -11,12 +11,12 @@ public class RFCProvider {
 
     private final RestTemplate restTemplate;
 
-    public RFCProvider(){
+    public RFCProvider() {
         this.restTemplate = new RestTemplate();
     }
 
-    public String getRFCAsText(String url){
-      return restTemplate.getForObject(url, String.class);
+    public String getRFCAsText(String url) {
+        return restTemplate.getForObject(url, String.class);
     }
 
 }

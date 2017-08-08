@@ -10,19 +10,26 @@ public class RFCTranslateRequest {
 
     private String url;
 
-    private String lang;
+    private String tgtLang;
+
+    private String srcLang;
 
     @JsonCreator
-    RFCTranslateRequest(@JsonProperty("url") String url, @JsonProperty("lang") String lang){
+    RFCTranslateRequest(@JsonProperty("url") String url, @JsonProperty("tgtLang") String tgtLang, @JsonProperty("srcLang") String srcLang) {
         this.url = url;
-        this.lang = lang;
+        this.tgtLang = tgtLang;
+        this.srcLang = srcLang;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public String getLang() {
-        return lang;
+    public String getTgtLang() {
+        return tgtLang;
+    }
+
+    public String getSrcLang() {
+        return srcLang;
     }
 }

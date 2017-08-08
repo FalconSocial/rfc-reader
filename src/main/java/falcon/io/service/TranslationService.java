@@ -1,41 +1,20 @@
 package falcon.io.service;
 
-import falcon.io.repository.RfcRepository;
-import falcon.io.repository.TranslatedRFC;
 import falcon.io.resource.TranslatedRfcDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import falcon.io.service.dto.DocumentAssembled;
 
 import javax.transaction.Transactional;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
- * Created by tibor on 2017-08-07.
+ * Created by tibor on 2017-08-08.
  */
-@Service
-public class TranslationService {
-
-    @Autowired
-    private RfcRepository rfcRepository;
-
-    @Autowired
-    private RFCProvider rfcProvider;
+public interface TranslationService {
+    @Transactional
+    String translate(String url, String srcLang, String tgtLang);
 
     @Transactional
-    public String translate(String url, String lang){
-        String document = rfcProvider.getRFCAsText(url);
-        return rfcRepository.save(new TranslatedRFC(UUID.randomUUID().toString())).getId();
-    }
+    TranslatedRfcDTO getTranslation(String id);
 
     @Transactional
-    public TranslatedRfcDTO getTranslation(String id){
-        Optional<TranslatedRFC> translatedRFC = rfcRepository.findById(id);
-        return translatedRFC.map(t -> t.asDTO()).orElseThrow(()->new IllegalArgumentException(String.format("Unknown document id: %s", id)));
-    }
-
+    void saveTranslation(DocumentAssembled document);
 }

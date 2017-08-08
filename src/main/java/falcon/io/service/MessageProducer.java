@@ -28,11 +28,11 @@ public class MessageProducer {
         this.literalTopic = literalTopic;
     }
 
-    public void sendForTranslation(String messageJson){
+    public void sendForTranslation(String messageJson) {
         this.client.publishJSON(translationTopic, messageJson);
     }
 
-    public void sendLiteral(String messageJson){
+    public void sendLiteral(String messageJson) {
         this.client.publishJSON(literalTopic, messageJson);
     }
 

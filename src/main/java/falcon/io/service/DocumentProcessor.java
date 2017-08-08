@@ -24,28 +24,24 @@ public class DocumentProcessor {
     @Autowired
     private MessageProducer messageProducer;
 
-    public DocumentProcessor(){
+    public DocumentProcessor() {
 
     }
 
-    public void setMessageProducer(MessageProducer messageProducer) {
-        this.messageProducer = messageProducer;
-    }
-
-    public void processDocument(String document, UUID documentId) {
-        ArrayList<ArrayList<Word>> pages = StringSplitter.split(document);
-        for(int i=0; i< pages.size(); i++){
-            processPage(pages.get(i), i, documentId, pages.size());
+    public void processDocument(DocumentProcessRequest request) {
+        ArrayList<ArrayList<Word>> pages = StringSplitter.split(request.getDocument());
+        for (int i = 0; i < pages.size(); i++) {
+            processPage(pages.get(i), i, request, pages.size());
         }
     }
 
-    private void processPage(ArrayList<Word> page, int pageIndex, UUID documentId, int numPages) {
-        for(int i=0; i< page.size(); i++){
-            processWord(page.get(i),pageIndex, i, documentId, numPages, page.size());
+    private void processPage(ArrayList<Word> page, int pageIndex, DocumentProcessRequest request, int numPages) {
+        for (int i = 0; i < page.size(); i++) {
+            processWord(page.get(i), pageIndex, i, request, numPages, page.size());
         }
     }
 
-    private void processWord(Word word, int pageIndex, int wordIndex, UUID documentId, int numPages, int numWords) {
+    private void processWord(Word word, int pageIndex, int wordIndex, DocumentProcessRequest request, int numPages, int numWords) {
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
         df.setTimeZone(tz);
@@ -55,21 +51,21 @@ public class DocumentProcessor {
         ObjectMapper om = new ObjectMapper();
         if (word.translatable) {
             WordSplit ws;
-            ws = WordSplit.builder().created(nowAsISO).payload(
-                    new Payload(documentId, word.word, dummyLang,
-                    new Page(wordIndex, pageIndex, numWords, numPages))).build();
+            ws = WordSplit.builder()
+                    .created(nowAsISO)
+                    .payload(new Payload(request.getId(), word.word, new Language(request.getSrcLang(), request.getTgtLang()), new Page(wordIndex, pageIndex, numWords, numPages)))
+                    .build();
             try {
                 this.messageProducer.sendForTranslation(om.writeValueAsString(ws));
             } catch (JsonProcessingException e) {
                 // TODO log and reraise?
             }
-        }
-
-        else {
+        } else {
             LiteralSplit ws;
-            ws = LiteralSplit.builder().created(nowAsISO).payload(
-                    new Payload(documentId, word.word, dummyLang,
-                    new Page(wordIndex, pageIndex, numWords, numPages))).build();
+            ws = LiteralSplit.builder()
+                    .created(nowAsISO)
+                    .payload(new Payload(request.getId(), word.word, dummyLang, new Page(wordIndex, pageIndex, numWords, numPages)))
+                    .build();
             try {
                 this.messageProducer.sendLiteral(om.writeValueAsString(ws));
             } catch (JsonProcessingException e) {
@@ -81,4 +77,7 @@ public class DocumentProcessor {
     }
 
 
+    public void setMessageProducer(MessageProducer messageProducer) {
+        this.messageProducer = messageProducer;
+    }
 }

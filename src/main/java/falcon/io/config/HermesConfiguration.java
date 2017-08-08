@@ -35,6 +35,9 @@ public class HermesConfiguration {
     @Value("${server.port}")
     private String localPort;
 
+    @Value("${myuri}")
+    private String myuri;
+
     @Bean
     public MessageProducer messageProducer() {
         return new MessageProducer(hermesUri, translationTopic, literalTopic);
@@ -50,7 +53,7 @@ public class HermesConfiguration {
         subscription.put("topicName", documentTopic);
         subscription.put("name", "translated-document-subscription");
         subscription.put("description", "I get the translated documents");
-        subscription.put("endpoint", String.format("http://localhost:%s/translated", localPort));
+        subscription.put("endpoint", String.format("http://%s:%s/translated",myuri, localPort));
         Map<String, String> owner = new TreeMap<>();
         owner.put("source", "Plaintext");
         owner.put("id", "Backend flock");
@@ -66,7 +69,7 @@ public class HermesConfiguration {
     }
 
     @PreDestroy
-    public void unsubscribe(){
+    public void unsubscribe() {
         new RestTemplate().delete(String.format("%s/topics/{0}/subscriptions/translated-document-subscription", hermesUri), documentTopic);
     }
 

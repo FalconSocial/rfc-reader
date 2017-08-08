@@ -44,14 +44,13 @@ public class StringSplitter {
 
         //String[] lines = document.split("\\r?\\n");
         String lineDelims = "\r\n";
-        StringTokenizer lineTokenizer = new StringTokenizer(document, lineDelims,
-                true);
+        StringTokenizer lineTokenizer = new StringTokenizer(document, lineDelims, true);
         ArrayList<ArrayList<Word>> parsedDocument = new ArrayList<>();
 
         ArrayList<Word> currentPage = new ArrayList<>();
         String delims = " \t\n\r\f,.:;?![]'";
 
-        while(lineTokenizer.hasMoreTokens()) {
+        while (lineTokenizer.hasMoreTokens()) {
             String line = lineTokenizer.nextToken();
             // Check if this is a page break.
             // If not, split up into words.
@@ -59,8 +58,7 @@ public class StringSplitter {
                 parsedDocument.add(currentPage);
                 currentPage = new ArrayList<>();
             }
-            StringTokenizer st = new StringTokenizer(line,
-                    delims, true);
+            StringTokenizer st = new StringTokenizer(line, delims, true);
             while (st.hasMoreTokens()) {
                 String wordOrToken = st.nextToken();
                 boolean isTranslatable = !delims.contains(wordOrToken);

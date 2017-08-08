@@ -11,7 +11,7 @@ public class TranslatedRfcDTO {
 
     private String state;
 
-    public TranslatedRfcDTO(String document, String id, String state){
+    public TranslatedRfcDTO(String document, String id, String state) {
         this.document = document;
         this.id = id;
         this.state = state;

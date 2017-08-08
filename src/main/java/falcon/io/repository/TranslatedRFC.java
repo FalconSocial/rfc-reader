@@ -12,8 +12,7 @@ import javax.persistence.*;
 public class TranslatedRFC {
 
     public static enum State {
-        TRANSLATED,
-        PROCESSING
+        TRANSLATED, PROCESSING
     }
 
     @Id
@@ -27,16 +26,16 @@ public class TranslatedRFC {
     private String document;
 
 
-    public TranslatedRFC(){
+    public TranslatedRFC() {
 
     }
 
-    public TranslatedRFC(String id){
+    public TranslatedRFC(String id) {
         this.id = id;
         this.state = State.PROCESSING;
     }
 
-    public TranslatedRfcDTO asDTO(){
+    public TranslatedRfcDTO asDTO() {
         return new TranslatedRfcDTO(document, id, state.name());
     }
 
@@ -46,5 +45,10 @@ public class TranslatedRFC {
 
     public String getId() {
         return id;
+    }
+
+    public void setDocument(String document) {
+        this.document = document;
+        this.state = State.TRANSLATED;
     }
 }
