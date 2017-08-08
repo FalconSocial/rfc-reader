@@ -1,13 +1,14 @@
 package falcon.io.parse;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import falcon.io.service.dto.*;
 import falcon.io.parse.StringSplitter.Word;
 import org.junit.Test;
 
@@ -91,4 +92,39 @@ public class StringSplitterTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void instantiateWordSplit() throws IOException {
+        WordSplit w = WordSplit.builder().created("now").payload(
+                new Payload(UUID.randomUUID(), "blah",
+                        new Language("en_US", "dk_DK"),
+                        new Page(1, 1, 2, 3))).build();
+        LiteralSplit l = LiteralSplit.builder().created("now").payload(
+                new Payload(UUID.randomUUID(), "blah",
+                        new Language("en_US", "dk_DK"),
+                        new Page(1, 1, 2, 3))).build();
+        ObjectMapper m = new ObjectMapper();
+        String wordJSON = m.writeValueAsString(w);
+        String literalJSON = m.writeValueAsString(l);
+        WordSplit w2 = m.readValue(wordJSON, WordSplit.class);
+        LiteralSplit s2 = m.readValue(literalJSON, LiteralSplit.class);
+    }
+
+    @Test
+    public void testMultipleRFCs() {
+        // TODO: load a few RFCs and check page splitting works.
+        System.out.println("Working Directory = " +
+                System.getProperty("user.dir"));
+    }
+
+    @Test
+    public void testDocumentAssembled() throws IOException {
+        DocumentAssembled d = new DocumentAssembled(UUID.randomUUID(), "source",
+                "type", "version 2.0", "created",
+                UUID.randomUUID(),
+                new DocumentPayload("documentId", "document",
+                        new Language("en_US", "en_UK")));
+        ObjectMapper m = new ObjectMapper();
+        String jsonified = m.writeValueAsString(d);
+        DocumentAssembled e = m.readValue(jsonified, DocumentAssembled.class);
+    }
 }
