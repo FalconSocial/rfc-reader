@@ -8,10 +8,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import falcon.io.service.dto.Language;
-import falcon.io.service.dto.Page;
-import falcon.io.service.dto.Payload;
-import falcon.io.service.dto.WordSplit;
+import falcon.io.service.dto.*;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -96,15 +93,17 @@ public class StringSplitterTest {
 
     @Test
     public void instantiateWordSplit() throws JsonProcessingException {
-        WordSplit w = new WordSplit(UUID.randomUUID(),
-                "rfc.reader", "WordSplit", "2.0",
-                new Date(), UUID.randomUUID(),
+        WordSplit w = WordSplit.builder().created("now").payload(
                 new Payload(UUID.randomUUID(), "blah",
                         new Language("en_US", "dk_DK"),
-                        new Page(1, 1, 2, 3)));
+                        new Page(1, 1, 2, 3))).build();
+        LiteralSplit l = LiteralSplit.builder().created("now").payload(
+                new Payload(UUID.randomUUID(), "blah",
+                        new Language("en_US", "dk_DK"),
+                        new Page(1, 1, 2, 3))).build();
         ObjectMapper m = new ObjectMapper();
-        String jsonified = m.writeValueAsString(w);
-        System.out.println(jsonified);
+        String wordJSON = m.writeValueAsString(w);
+        String literalJSON = m.writeValueAsString(l);
     }
 
 }
