@@ -1,0 +1,49 @@
+pipeline:
+  test:
+    image: frolvlad/alpine-oraclejdk8
+    commands:
+      - chmod +x ./mvnw
+      - ./mvnw --settings=settings.xml clean install
+    when:
+      event: pull_request
+      branch:
+        excludes: master
+  build:
+    image: frolvlad/alpine-oraclejdk8
+    commands:
+      - chmod +x ./mvnw
+      - ./mvnw -Pdist clean install
+    when:
+      event: push
+      branch: master
+  publish:
+    image: plugins/docker
+    repo: docker.flcn.io/hermes/rfc-reader
+    registry: docker.flcn.io
+    tags:
+      - latest
+      - ${DRONE_BUILD_NUMBER}-${DRONE_COMMIT_SHA:0:8}
+    secrets: [ DOCKER_USERNAME, DOCKER_PASSWORD ]
+    when:
+      event: push
+      branch: master
+  deploy-staging:
+    image: peloton/drone-rancher
+    url: https://rancher.flcn.io
+    service: rfc-reader
+    docker_image: docker.flcn.io/hermes/rfc-reader:${DRONE_BUILD_NUMBER}-${DRONE_COMMIT_SHA:0:8}
+    confirm: true
+    timeout: 180
+    secrets: [ RANCHER_ACCESS_KEY, RANCHER_SECRET_KEY ]
+    when:
+      event: push
+      branch: master
+  notify:
+    image: plugins/slack
+    webhook: https://hooks.slack.com/services/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
+    channel: backend-flock-day
+    username: drone
+    when:
+      event: push
+      branch: master
+      status: [ success, failure ]
