@@ -4,41 +4,41 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 
-class Word {
-
-    public String word;
-    public boolean translatable;
-
-    public Word(String word, boolean translatable) {
-        this.word = word;
-        this.translatable = translatable;
-    }
-
-    public String toString() {
-        return "\"" + word + "\"" + " - " + new Boolean(translatable).toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Word word1 = (Word) o;
-
-        if (translatable != word1.translatable) return false;
-        return word != null ? word.equals(word1.word) : word1.word == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = word != null ? word.hashCode() : 0;
-        result = 31 * result + (translatable ? 1 : 0);
-        return result;
-    }
-}
-
-
 public class StringSplitter {
+
+
+    public static class Word {
+
+        public String word;
+        public boolean translatable;
+
+        public Word(String word, boolean translatable) {
+            this.word = word;
+            this.translatable = translatable;
+        }
+
+        public String toString() {
+            return "\"" + word + "\"" + " - " + new Boolean(translatable).toString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Word word1 = (Word) o;
+
+            if (translatable != word1.translatable) return false;
+            return word != null ? word.equals(word1.word) : word1.word == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = word != null ? word.hashCode() : 0;
+            result = 31 * result + (translatable ? 1 : 0);
+            return result;
+        }
+    }
 
     public static ArrayList<ArrayList<Word>> split(String document) {
 
