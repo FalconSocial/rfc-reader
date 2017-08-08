@@ -1,9 +1,17 @@
 package falcon.io.parse;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.UUID;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import falcon.io.service.dto.Language;
+import falcon.io.service.dto.Page;
+import falcon.io.service.dto.Payload;
+import falcon.io.service.dto.WordSplit;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -84,6 +92,19 @@ public class StringSplitterTest {
         expected.add(firstPage);
         expected.add(secondPage);
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void instantiateWordSplit() throws JsonProcessingException {
+        WordSplit w = new WordSplit(UUID.randomUUID(),
+                "rfc.reader", "WordSplit", "2.0",
+                new Date(), UUID.randomUUID(),
+                new Payload(UUID.randomUUID(), "blah",
+                        new Language("en_US", "dk_DK"),
+                        new Page(1, 1, 2, 3)));
+        ObjectMapper m = new ObjectMapper();
+        String jsonified = m.writeValueAsString(w);
+        System.out.println(jsonified);
     }
 
 }
