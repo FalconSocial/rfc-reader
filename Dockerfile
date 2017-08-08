@@ -10,6 +10,6 @@ ENV JAVA_OPTS="-server \
 
 ADD target/flock-rfc-reader-0.0.1-SNAPSHOT.jar /app/rfc-reader-dist.jar
 
-ENTRYPOINT [ "sh", "-c", "cd $APP_HOME && $JAVA_HOME/bin/java $JAVA_OPTS $APP_OPTS -jar rfc-assembler-dist.jar" ]
+ENTRYPOINT [ "sh", "-c", "cd $APP_HOME && $JAVA_HOME/bin/java $JAVA_OPTS $APP_OPTS -jar rfc-reader-dist.jar" ]
 EXPOSE 8080
 
