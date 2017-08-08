@@ -7,12 +7,17 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import static org.mockito.Mockito.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import falcon.io.service.DocumentProcessor;
+import falcon.io.service.MessageProducer;
 import falcon.io.service.dto.*;
 import falcon.io.parse.StringSplitter.Word;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class StringSplitterTest {
 
@@ -126,5 +131,25 @@ public class StringSplitterTest {
         ObjectMapper m = new ObjectMapper();
         String jsonified = m.writeValueAsString(d);
         DocumentAssembled e = m.readValue(jsonified, DocumentAssembled.class);
+    }
+
+    @Test
+    public void testDocumentProcessor() {
+        MessageProducer messageProducer = mock(MessageProducer.class);
+        DocumentProcessor documentProcessor = new DocumentProcessor();
+
+        documentProcessor.setMessageProducer(messageProducer);
+
+        documentProcessor.processDocument("foo",
+                UUID.randomUUID());
+
+        //assertTrue(documentProcessor.wasSentForTranslation());
+        verify(messageProducer, times(1)).sendForTranslation(any());
+        verify(messageProducer, times(0)).sendLiteral(any());
+
+        documentProcessor.processDocument(",",
+                UUID.randomUUID());
+        verify(messageProducer, times(1)).sendForTranslation(any());
+        verify(messageProducer, times(1)).sendLiteral(any());
     }
 }
