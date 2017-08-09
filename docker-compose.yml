@@ -1,0 +1,17 @@
+version: '2'
+services:
+  reader:
+    container_name: rfc-reader
+    build: .
+    environment:
+      HERMES_URI: "http://hermes-management:8090"
+      MY_URI: "http://rfc-reader:8088"
+    ports:
+      - "8088:8088/tcp"
+    networks:
+      - platformnet
+
+networks:
+  platformnet:
+    external:
+      name: platformnet
