@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>falcon.io</groupId>
-    <artifactId>flock-rfc-reader</artifactId>
+    <artifactId>rfc-reader</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>flock-rfc-reader</name>
+    <name>rfc-reader</name>
     <description>flock day 2017.08.07 - RFC reader</description>
 
     <parent>
